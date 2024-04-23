@@ -43,11 +43,42 @@ const PasswordGenerator: React.FC = () => {
 
         setPassword(generatedPassword);
     };
-
-    const copyToClipboard = () => {
-        navigator.clipboard.writeText(password).then(() => {
-            alert('Password copied to clipboard!');
-        });
+    const copyToClipboard = (): void => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(password).then(() => {
+                alert('Password copied to clipboard!');
+            }).catch((err: any) => {
+                // If the Clipboard API fails, fallback to another method
+                console.error('Failed to copy password to clipboard', err);
+                fallbackCopyToClipboard(password);
+            });
+        } else {
+            // Fallback method for environments where navigator.clipboard is not available
+            fallbackCopyToClipboard(password);
+        }
+    };
+    
+    const fallbackCopyToClipboard = (textToCopy: string): void => {
+        const textArea: HTMLTextAreaElement = document.createElement("textarea");
+        textArea.value = textToCopy;
+    
+        textArea.style.position = "absolute";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            const successful: boolean = document.execCommand('copy');
+            const msg: string = successful ? 'successful' : 'unsuccessful';
+            console.log(`Fallback: Copying text command was ${msg}`);
+            alert('Password copied to clipboard (fallback method)!');
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+    
+        document.body.removeChild(textArea);
     };
 
     return (
