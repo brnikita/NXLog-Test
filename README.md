@@ -1,6 +1,6 @@
-#Create ‘Password generator’ component.
+# Create ‘Password generator’ component.
 
-##Description
+## Description
 
 General component structure is: input(type text) where generated password will be stored. Copy
 button inside the input in order to copy generated password. Input(type range) for selecting
