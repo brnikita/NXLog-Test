@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import './PasswordGenerator.scss';
+import { ReactComponent as CopyIcon } from '../assets/icons/copy-icon.svg';
 
 const PasswordGenerator: React.FC = () => {
     const [password, setPassword] = useState<string>(''),
@@ -51,15 +52,19 @@ const PasswordGenerator: React.FC = () => {
 
     return (
         <div className="password-generator">
-            <input type="text" value={password} readOnly />
-            <button onClick={copyToClipboard}>Copy</button>
-            <div>
-                <input type="range" min="4" max="20" value={length} onChange={(event) => setLength(parseInt(event.target.value, 10))} />
+            <div className="password-input">
+                <input type="text" value={password} readOnly />
+                <button onClick={copyToClipboard} title="Copy to clipboard">
+                    <CopyIcon />
+                </button>
             </div>
+
             <div>    
                 Charachter length {length}
             </div>
-            
+            <div className="password-generator-range">
+                <input type="range" min="4" max="20" value={length} onChange={(event) => setLength(parseInt(event.target.value, 10))} />
+            </div>
             <ul className='password-generator-settings'>
                 <li>
                     <label>
@@ -87,7 +92,7 @@ const PasswordGenerator: React.FC = () => {
                 </li>
             </ul>
 
-            <button className="light-green"  onClick={generatePassword}>Generate</button>
+            <button type="submit" className="light-green"  onClick={generatePassword}>Generate</button>
         </div>
     );
 };
